@@ -78,15 +78,22 @@ end
 
 # test if the value X[i] is null without checking the `I` index validity
 unsafe_isnull(X::NullableArray, I::Int...) = Base.unsafe_getindex(X.isnull, I...)
+unsafe_isnull{T}(X::AbstractNullableArray{T}, I::Int...) = isnull(Base.unsafe_getindex(X, I...))
 
 # returns non-null element of X wrapped in Nullable
 function unsafe_getindex_notnull(X::NullableArray, I::Int...)
     return Nullable(Base.unsafe_getindex(X.values, I...))
 end
+function unsafe_getindex_notnull{T}(X::AbstractNullableArray{T}, I::Int...)
+    return Base.unsafe_getindex(X, I...)
+end
 
 # return non-null element of X
 function unsafe_getvalue_notnull(X::NullableArray, I::Int...)
     return Base.unsafe_getindex(X.values, I...)
+end
+function unsafe_getvalue_notnull{T}(X::AbstractNullableArray{T}, I::Int...)
+    return get(Base.unsafe_getindex(X, I...))
 end
 
 if VERSION >= v"0.5.0-dev+4697"
