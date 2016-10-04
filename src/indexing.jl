@@ -76,12 +76,14 @@ to store `v` at `I`.
     return v
 end
 
+# returns non-null element of X wrapped in Nullable
 function unsafe_getindex_notnull(X::NullableArray, I::Int...)
-    return Nullable(getindex(X.values, I...))
+    return Nullable(Base.unsafe_getindex(X.values, I...))
 end
 
+# return non-null element of X
 function unsafe_getvalue_notnull(X::NullableArray, I::Int...)
-    return getindex(X.values, I...)
+    return Base.unsafe_getindex(X.values, I...)
 end
 
 if VERSION >= v"0.5.0-dev+4697"
