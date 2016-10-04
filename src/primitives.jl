@@ -1,3 +1,4 @@
+Base.isnull(x::NullableArray) = x.isnull
 Base.isnull(X::NullableArray, I::Int...) = X.isnull[I...]
 Base.values(X::NullableArray, I::Int...) = X.values[I...]
 
