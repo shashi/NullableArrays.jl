@@ -76,6 +76,9 @@ to store `v` at `I`.
     return v
 end
 
+# test if the value X[i] is null without checking the `I` index validity
+unsafe_isnull(X::NullableArray, I::Int...) = Base.unsafe_getindex(X.isnull, I...)
+
 # returns non-null element of X wrapped in Nullable
 function unsafe_getindex_notnull(X::NullableArray, I::Int...)
     return Nullable(Base.unsafe_getindex(X.values, I...))
