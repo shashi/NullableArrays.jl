@@ -123,6 +123,11 @@ end
 for op in (:+, :-, :*, :/, :%, :÷, :&, :|, :^, :<<, :>>, :(>>>),
            :(==), :<, :>, :<=, :>=,
            :scalarmin, :scalarmax)
+
+    if method_exists(getfield(Base, op), Tuple{Nullable, Nullable})
+        continue
+    end
+
     @eval begin
         @inline function $op{S,T}(x::Nullable{S}, y::Nullable{T})
             R = promote_op(@functorize($op), S, T)
@@ -133,7 +138,6 @@ for op in (:+, :-, :*, :/, :%, :÷, :&, :|, :^, :<<, :>>, :(>>>),
                                           Nullable{R}($op(x.value, y.value))
             end
         end
-        $op(x::Nullable{Union{}}, y::Nullable{Union{}}) = Nullable()
         $op{S}(x::Nullable{Union{}}, y::Nullable{S}) = Nullable{S}()
         $op{S}(x::Nullable{S}, y::Nullable{Union{}}) = Nullable{S}()
     end
